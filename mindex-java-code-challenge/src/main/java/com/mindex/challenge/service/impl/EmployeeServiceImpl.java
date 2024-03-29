@@ -29,7 +29,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee read(String id) {
-        LOG.debug("Creating employee with id [{}]", id);
+        // Found small bug here, should be logging that we are looking up the
+        // employee, not creating
+        LOG.debug("Finding employee with id [{}]", id);
 
         Employee employee = employeeRepository.findByEmployeeId(id);
 
