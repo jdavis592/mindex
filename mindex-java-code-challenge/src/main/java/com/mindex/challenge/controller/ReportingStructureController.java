@@ -1,5 +1,6 @@
 package com.mindex.challenge.controller;
 
+import com.mindex.challenge.data.ReportingStructure;
 import com.mindex.challenge.service.ReportingStructureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +18,9 @@ public class ReportingStructureController {
     private ReportingStructureService reportingStructureService;
 
     @GetMapping("/reportingStructure/{id}")
-    public int CalculateNumberOfReports(@PathVariable String id) {
+    public ReportingStructure CalculateNumberOfReports(@PathVariable String id) {
         LOG.debug("Received CalculateNumberOfReports request for id[{}]", id);
 
-        return reportingStructureService.CalculateNumberOfReports(id);
+        return reportingStructureService.GetReportingStructure(id);
     }
 }

@@ -1,5 +1,7 @@
 package com.mindex.challenge.service;
 
+import com.mindex.challenge.data.ReportingStructure;
+
 public interface ReportingStructureService {
-    int CalculateNumberOfReports(String employeeId);
+    ReportingStructure GetReportingStructure(String employeeId);
 }
