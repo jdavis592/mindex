@@ -1,27 +1,27 @@
 package com.mindex.challenge.data;
 
-import java.util.Date;
+
+import java.time.LocalDate;
 
 public class Compensation {
     private static Employee employee;
 
-    private double salary;
+    private Double salary;
 
-    private static Date effectiveDate;
+    private static LocalDate effectiveDate;
 
     public Compensation(){
-
     }
 
     public Employee getEmployee(){ return employee; }
 
-    public void setEmployee(Employee employee){ this.employee = employee; }
+    public void setEmployee(Employee employee){ Compensation.employee = employee; }
 
-    public double getSalary(){ return salary; }
+    public Double getSalary(){ return salary; }
 
     public void setSalary(double salary){ this.salary = salary; }
 
-    public Date getEffectiveDate(){ return effectiveDate; }
+    public LocalDate getEffectiveDate(){ return effectiveDate; }
 
-    public void setEffectiveDate(Date effectiveDate){ this.effectiveDate = effectiveDate; }
+    public void setEffectiveDate(LocalDate effectiveDate){ Compensation.effectiveDate = effectiveDate; }
 }
