@@ -12,6 +12,10 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Most of the compensation implementation you find here was a direct copy from the employee implementation supplied. I
+ * knew for the most part that I wanted to try and keep compensation decoupled, so I went with this implementation.
+ * */
 @Component
 public class DataBootstrap {
     private static final String EMPLOYEE_DATASTORE_LOCATION = "/static/employee_database.json";

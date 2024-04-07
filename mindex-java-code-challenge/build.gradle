@@ -25,7 +25,13 @@ repositories {
 
 dependencies {
 	implementation ('org.springframework.boot:spring-boot-starter-web')
+	implementation('org.springframework.boot:spring-boot-starter-validation')
 	implementation ('org.springframework.boot:spring-boot-starter-data-mongodb')
 	testImplementation ('org.springframework.boot:spring-boot-starter-test')
 	implementation (group: 'de.bwaldvogel', name: 'mongo-java-server', version: '1.25.0')
+	compileOnly ('org.projectlombok:lombok:1.18.32')
+	annotationProcessor ('org.projectlombok:lombok:1.18.32')
+
+	testCompileOnly ('org.projectlombok:lombok:1.18.32')
+	testAnnotationProcessor ('org.projectlombok:lombok:1.18.32')
 }

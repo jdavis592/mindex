@@ -1,33 +1,29 @@
 package com.mindex.challenge.data;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
+/**
+ * Compensation data object consists of 3 things: EmployeeId, salary, and effectiveDate. I went with implementing solely
+ * an employeeId here instead of a whole EmployeeId because I thought having an entire employee object within the
+ * confines of two repositories was unnecessary. In order to create a connection between the data types, we use a
+ * specific employeeId related solely to the employee we query for. Spring takes care of validation with the set
+ * annotations.
+ **/
+@Getter @Setter @NotNull @NoArgsConstructor @AllArgsConstructor
 public class Compensation {
-    private String compensationId;
+    private String employeeId;
 
-    private static Employee employee;
-
+    @NotNull(message = "Must provide salary with Compensation Data")
+    @Min(value = 0L, message = "The value must be positive")
     private Double salary;
 
-    private static LocalDate effectiveDate;
-
-    public Compensation(){
-    }
-
-    public String getCompensationId() { return compensationId; }
-
-    public void setCompensationId(String compensationId) { this.compensationId = compensationId; }
-
-    public Employee getEmployee(){ return employee; }
-
-    public void setEmployee(Employee employee){ this.employee = employee; }
-
-    public Double getSalary(){ return salary; }
-
-    public void setSalary(double salary){ this.salary = salary; }
-
-    public LocalDate getEffectiveDate(){ return effectiveDate; }
-
-    public void setEffectiveDate(LocalDate effectiveDate){ this.effectiveDate = effectiveDate; }
+    @FutureOrPresent
+    private LocalDate effectiveDate;
 }

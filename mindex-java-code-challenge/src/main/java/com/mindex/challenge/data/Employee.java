@@ -1,63 +1,32 @@
 package com.mindex.challenge.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
+
     private String employeeId;
+
+    @NotEmpty(message = "first name is required")
     private String firstName;
+
+    @NotEmpty(message = "last name is required")
     private String lastName;
+
+    @NotEmpty(message = "must provide position")
     private String position;
+
+    @NotEmpty(message = "must provide department")
     private String department;
+
     private List<Employee> directReports;
-
-    public Employee() {
-    }
-
-    public String getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public List<Employee> getDirectReports() {
-        return directReports;
-    }
-
-    public void setDirectReports(List<Employee> directReports) {
-        this.directReports = directReports;
-    }
 }

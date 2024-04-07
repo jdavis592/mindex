@@ -3,7 +3,6 @@ package com.mindex.challenge.service.impl;
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.data.ReportingStructure;
-import com.mindex.challenge.service.EmployeeService;
 import com.mindex.challenge.service.ReportingStructureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +19,12 @@ public class ReportingStructureServiceImpl implements ReportingStructureService 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    // TODO: Make less calls to the repository. Current structure will make multiple calls to repository
 
-    /*
-    * CalculateNumberOfReports is a recursive function that will take an employeeID and calculate the number of
-    * direct and distinct employees that work under the original employee and return it for use.
-    */
+    /**
+     * CalculateNumberOfReports is a recursive helper function that will take an employeeID and calculate the number of
+     * direct and distinct employees that work under the original employee and return it for use. Recursion makes me so
+     * happy because it took a long time for me to truly understand/implement them in college.
+     */
     private int calculateNumberOfReports(String employeeId){
         // Assume the employee is a bossEmployee
         Employee bossEmployee = employeeRepository.findByEmployeeId(employeeId);
@@ -49,14 +48,19 @@ public class ReportingStructureServiceImpl implements ReportingStructureService 
         return numberOfReports;
     }
 
+    /**
+     * Will return the reporting structure calculated at run time, which includes the highest level employee dat followed
+     * by all of their subordinates.
+     * @param employeeId Employee ID number to keep watch on the Employee data type.
+     * */
     @Override
     public ReportingStructure GetReportingStructure(String employeeId) {
-        ReportingStructure result = new ReportingStructure();
-        LOG.debug("Creating reporting structure for employee ID [{}]", employeeId);
+        LOG.debug("Creating reporting structure for employee ID {]", employeeId);
 
         Employee employee = employeeRepository.findByEmployeeId(employeeId);
         int numberOfReports = calculateNumberOfReports(employee.getEmployeeId());
 
+        ReportingStructure result = new ReportingStructure();
         result.setEmployee(employee);
         result.setNumberOfReports(numberOfReports);
 

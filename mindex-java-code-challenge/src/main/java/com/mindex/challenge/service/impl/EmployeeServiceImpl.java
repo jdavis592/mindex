@@ -19,7 +19,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee create(Employee employee) {
-        LOG.debug("Creating employee [{}]", employee);
+        LOG.debug("Creating employee {}", employee);
 
         employee.setEmployeeId(UUID.randomUUID().toString());
         employeeRepository.insert(employee);
@@ -31,7 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee read(String id) {
         // Found small bug here, should be logging that we are looking up the
         // employee, not creating
-        LOG.debug("Finding employee with id [{}]", id);
+        LOG.debug("Finding employee with id {}", id);
 
         Employee employee = employeeRepository.findByEmployeeId(id);
 
@@ -44,7 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee update(Employee employee) {
-        LOG.debug("Updating employee [{}]", employee);
+        LOG.debug("Updating employee {}", employee);
 
         return employeeRepository.save(employee);
     }

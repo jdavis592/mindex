@@ -1,21 +1,18 @@
 package com.mindex.challenge.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReportingStructure {
-    // Static as this should not change
-    private static Employee employee;
-
-    // No static as this value is subject to change
+    @NotNull
+    private Employee employee;
     private int numberOfReports;
-
-    public ReportingStructure(){
-
-    }
-
-    public Employee getEmployee(){ return employee; }
-
-    public void setEmployee(Employee employee){ this.employee = employee; }
-
-    public int getNumberOfReports(){ return numberOfReports; }
-
-    public void setNumberOfReports(int numberOfReports){ this.numberOfReports = numberOfReports; }
 }

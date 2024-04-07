@@ -5,34 +5,42 @@ import com.mindex.challenge.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
+@RequestMapping("/employee")
 public class EmployeeController {
     private static final Logger LOG = LoggerFactory.getLogger(EmployeeController.class);
 
     @Autowired
     private EmployeeService employeeService;
 
-    @PostMapping("/employee")
-    public Employee create(@RequestBody Employee employee) {
-        LOG.debug("Received employee create request for [{}]", employee);
+    @PostMapping("")
+    @ResponseBody
+    public ResponseEntity<Employee> create(@RequestBody @Valid Employee employee) {
+        LOG.debug("Received employee create request for {}", employee);
 
-        return employeeService.create(employee);
+        return new ResponseEntity<>(employeeService.create(employee), HttpStatus.OK);
     }
 
-    @GetMapping("/employee/{id}")
-    public Employee read(@PathVariable String id) {
-        LOG.debug("Received employee create request for id [{}]", id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> read(@PathVariable String id) {
+        LOG.debug("Received employee create request for id {}", id);
 
-        return employeeService.read(id);
+        return new ResponseEntity<>(employeeService.read(id), HttpStatus.OK);
     }
 
-    @PutMapping("/employee/{id}")
-    public Employee update(@PathVariable String id, @RequestBody Employee employee) {
-        LOG.debug("Received employee create request for id [{}] and employee [{}]", id, employee);
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<Employee> update(@PathVariable String id, @RequestBody Employee employee) {
+        LOG.debug("Received employee create request for id {} and employee {}", id, employee);
 
         employee.setEmployeeId(id);
-        return employeeService.update(employee);
+        return new ResponseEntity<>(employeeService.update(employee), HttpStatus.OK);
     }
 }

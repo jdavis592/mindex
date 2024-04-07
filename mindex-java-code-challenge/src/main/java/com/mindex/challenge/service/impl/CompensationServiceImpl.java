@@ -1,9 +1,7 @@
 package com.mindex.challenge.service.impl;
 
 import com.mindex.challenge.dao.CompensationRepository;
-import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Compensation;
-import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.service.CompensationService;
 import com.mindex.challenge.service.EmployeeService;
 import org.slf4j.Logger;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Service
 public class CompensationServiceImpl implements CompensationService {
@@ -22,66 +19,52 @@ public class CompensationServiceImpl implements CompensationService {
     @Autowired
     private CompensationRepository compensationRepository;
     @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
     private EmployeeService employeeService;
 
-    /*
-     * create implementation will work as follows:
-     * Create new compensation identifier for new compensation object
-     * If employee exists, grab from database. Else, create one.
-     * Set effective date = current date
-     * Set salary = request salary amount. If it doesn't exist, throw exception
-     */
+    /**
+     * getCompensationByEmployeeId implements the Compensation like-named service function. It will check if an employee
+     * object exists with the id provided. If not, it will throw an exception. I decided to implement it this way to
+     * reinforce the idea that compensation data should not exist without matching employee data in place.
+     * @param employeeId ID used to find matching compensation data
+     * */
     @Override
-    public Compensation create(Compensation compensation) {
-        LOG.debug("Creating compensation data object from request [{}]", compensation);
-        // Create new identifier for compensation object
-        compensation.setCompensationId(UUID.randomUUID().toString());
-
-        // If employee object after querying the repository is null, throw exception
-        if (compensation.getEmployee() == null) {
-            throw new RuntimeException("Must have employee information to create Compensation data.");
+    public Compensation getCompensationByEmployeeId(String employeeId) {
+        LOG.debug("Reading compensation data for employee ID - {}", employeeId);
+        try {
+            return compensationRepository.findByEmployeeId(employeeId);
+        } catch (Exception e){
+            throw new RuntimeException("Error occurred while finding compensation data in repository.", e);
         }
-        // If  salary is null, throw exception
-        if (compensation.getSalary() == null) {
-            throw new RuntimeException("Must have a salary to create Compensation data.");
-        }
-
-        // Set the employee data based on id results from employee table
-        compensation.setEmployee(employeeRepository.findByEmployeeId(compensation.getEmployee().getEmployeeId()));
-
-        // Create employee object if information is provided and is not existing employee
-        if (compensation.getEmployee() != null) {
-            if(compensation.getEmployee().getEmployeeId() == null && validateEmployeeRequestInformation(compensation.getEmployee())) {
-                compensation.setEmployee(employeeService.create(compensation.getEmployee()));
-            }
-        }
-
-        // set date to current date every time we create a salary
-        compensation.setEffectiveDate(LocalDate.now());
-
-        // Insert into compensation repository
-        compensationRepository.insert(compensation);
-
-        return compensation;
     }
 
-    private boolean validateEmployeeRequestInformation(Employee employee) {
-        return (employee.getFirstName() != null && employee.getLastName() != null && employee.getPosition() != null && employee.getDepartment() != null);
-    }
-
-    // Reads compensation data by finding the unique compensation identifier assigned upon creation.
+    /**
+     * createCompensation will create compensation data for pre-existing employee data. Compensation should not exist
+     * without matching Employee data.
+     * @param employeeId ID that links compensation to pre-existing employee data
+     * @param salary salary to set for employee found at employeeId
+     * @param effectiveDate date in which this data is to go into effect. In a perfect world (and within this
+     *                      application), this value should always be in the future.
+     * */
     @Override
-    public Compensation read(String compensationId) {
-        LOG.debug("Reading compensation data object [{}]", compensationId);
-
-        Compensation resp =  compensationRepository.findByCompensationId(compensationId);
-
-        if (resp == null) {
-            throw new RuntimeException("Invalid compensationId: " + compensationId);
+    public Compensation createCompensation(String employeeId, Double salary, LocalDate effectiveDate) {
+        // Validate if the employee with the given employeeId exists
+        if (employeeService.read(employeeId) == null) {
+            throw new IllegalArgumentException("Employee with ID " + employeeId + " does not exist");
         }
 
-        return resp;
+        // Inject new values to a new Compensation object
+        LOG.debug("Creating New Compensation Data");
+        Compensation compensation = new Compensation();
+        compensation.setEmployeeId(employeeId);
+        compensation.setSalary(salary);
+        compensation.setEffectiveDate(effectiveDate);
+
+        // Try to persist to the compensation repository
+        try {
+            LOG.debug("Saving Compensation data to the compensation repository");
+            return compensationRepository.save(compensation);
+        } catch(Exception e) {
+            throw new RuntimeException("Error occurred while saving compensation data to repository.", e);
+        }
     }
 }
