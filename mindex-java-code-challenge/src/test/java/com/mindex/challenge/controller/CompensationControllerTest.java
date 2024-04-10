@@ -15,6 +15,11 @@ import java.time.LocalDate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * I tried to separate my testing between mock testing and the resttemplate testing I saw from the Employee implementation
+ * test file. To be completely honest, I tried mocking the controller tests as well, but it gave me too much trouble.
+ * Instead, I settled on this method as it was more straightforward and easier for me to implement.
+ * */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CompensationControllerTest {

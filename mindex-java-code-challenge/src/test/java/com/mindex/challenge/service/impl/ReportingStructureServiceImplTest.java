@@ -55,7 +55,7 @@ public class ReportingStructureServiceImplTest {
         // Call the service method
         ReportingStructure reportingStructure = reportingStructureService.GetReportingStructure(testEmployee.getEmployeeId());
 
-        // Assertions
+        // Relevant Assertions
         assertNotNull(reportingStructure);
         assertEquals(2, reportingStructure.getNumberOfReports());
     }
