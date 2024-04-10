@@ -16,11 +16,14 @@ public class CompensationServiceImpl implements CompensationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
-    @Autowired
-    private CompensationRepository compensationRepository;
-    @Autowired
-    private EmployeeService employeeService;
+    private final CompensationRepository compensationRepository;
+    private final EmployeeService employeeService;
 
+    @Autowired
+    public CompensationServiceImpl(CompensationRepository compensationRepository, EmployeeService employeeService) {
+        this.compensationRepository = compensationRepository;
+        this.employeeService = employeeService;
+    }
     /**
      * getCompensationByEmployeeId implements the Compensation like-named service function. It will check if an employee
      * object exists with the id provided. If not, it will throw an exception. I decided to implement it this way to
@@ -62,7 +65,13 @@ public class CompensationServiceImpl implements CompensationService {
         // Try to persist to the compensation repository
         try {
             LOG.debug("Saving Compensation data to the compensation repository");
-            return compensationRepository.save(compensation);
+            // I struggled to get a test case written with mocks because for some reason, this repository object was
+            // returning null. If you look at the save() method, it says that it cannot return null. I could not figure
+            // out why this was returning null (I was returning compensationRepository.save(compensation) on one line),
+            // but returning the compensation object fixed the situation. Would love feedback here on why this may have
+            // been the case.
+            compensationRepository.save(compensation);
+            return compensation;
         } catch(Exception e) {
             throw new RuntimeException("Error occurred while saving compensation data to repository.", e);
         }

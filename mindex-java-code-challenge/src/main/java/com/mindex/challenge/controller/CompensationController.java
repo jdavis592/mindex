@@ -19,8 +19,13 @@ import javax.validation.Valid;
 public class CompensationController {
     private static final Logger LOG = LoggerFactory.getLogger(CompensationController.class);
 
+
+    private final CompensationService compensationService;
+
     @Autowired
-    private CompensationService compensationService;
+    public CompensationController(CompensationService compensationService) {
+        this.compensationService = compensationService;
+    }
 
     /**
      * getCompensationByEmployeeId extracts employee id from the path variable in request to find matching compensation
@@ -53,3 +58,4 @@ public class CompensationController {
                 compensation.getEffectiveDate()), HttpStatus.CREATED);
     }
 }
+

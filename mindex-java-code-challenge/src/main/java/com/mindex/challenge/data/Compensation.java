@@ -1,10 +1,7 @@
 package com.mindex.challenge.data;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -16,7 +13,11 @@ import java.time.LocalDate;
  * specific employeeId related solely to the employee we query for. Spring takes care of validation with the set
  * annotations.
  **/
-@Getter @Setter @NotNull @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NotNull
+@NoArgsConstructor
+@AllArgsConstructor
 public class Compensation {
     private String employeeId;
 
