@@ -21,7 +21,7 @@ public class ReportingStructureServiceImpl implements ReportingStructureService 
 
 
     /**
-     * CalculateNumberOfReports is a recursive helper function that will take an employeeID and calculate the number of
+     * calculateNumberOfReports is a recursive helper function that will take an employeeID and calculate the number of
      * direct and distinct employees that work under the original employee and return it for use. Recursion makes me so
      * happy because it took a long time for me to truly understand/implement them in college.
      */
@@ -55,7 +55,7 @@ public class ReportingStructureServiceImpl implements ReportingStructureService 
      * */
     @Override
     public ReportingStructure GetReportingStructure(String employeeId) {
-        LOG.debug("Creating reporting structure for employee ID {]", employeeId);
+        LOG.debug("Creating reporting structure for employee ID {}", employeeId);
 
         Employee employee = employeeRepository.findByEmployeeId(employeeId);
         int numberOfReports = calculateNumberOfReports(employee.getEmployeeId());

@@ -1,54 +1,62 @@
 package com.mindex.challenge.service.impl;
 
+import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.data.ReportingStructure;
-import com.mindex.challenge.service.ReportingStructureService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(MockitoJUnitRunner.class)
 public class ReportingStructureServiceImplTest {
 
-    private String reportingStructureUrl;
+    @InjectMocks
+    private ReportingStructureServiceImpl reportingStructureService;
 
-    @Autowired
-    private ReportingStructureService reportingStructureService;
-
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
+    @Mock
+    private EmployeeRepository employeeRepository;
 
     @Before
     public void setup() {
-        reportingStructureUrl = "http://localhost:" + port + "/reportingStructure/{id}";
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
     public void testGetReportingStructure() {
+        // Create test employee
         Employee testEmployee = new Employee();
-        // Using John Lennon to save time
-        testEmployee.setEmployeeId("16a596ae-edd3-4847-99fe-c4518e82c86f");
+        testEmployee.setEmployeeId("testEmployeeId");
 
-        ReportingStructure testReportingStructure = reportingStructureService.GetReportingStructure(testEmployee.getEmployeeId());
+        // Create direct reports for the test employee
+        Employee directReport1 = new Employee();
+        directReport1.setEmployeeId("directReport1Id");
+        Employee directReport2 = new Employee();
+        directReport2.setEmployeeId("directReport2Id");
+        List<Employee> directReports = Arrays.asList(directReport1, directReport2);
+        testEmployee.setDirectReports(directReports);
 
-        assertEquals(4, testReportingStructure.getNumberOfReports());
+        // Mock behavior of employee repository based on reporting structure implementation. Interesting fact here - when
+        // testing recursive statements, ensure you create a when statement for each iteration you expect to see. Otherwise,
+        // you will get an NPE and return confused all-the-while questioning life choices :')
+        when(employeeRepository.findByEmployeeId(testEmployee.getEmployeeId())).thenReturn(testEmployee);
+        when(employeeRepository.findByEmployeeId(directReport1.getEmployeeId())).thenReturn(directReport1);
+        when(employeeRepository.findByEmployeeId(directReport2.getEmployeeId())).thenReturn(directReport2);
+
+        // Call the service method
+        ReportingStructure reportingStructure = reportingStructureService.GetReportingStructure(testEmployee.getEmployeeId());
+
+        // Assertions
+        assertNotNull(reportingStructure);
+        assertEquals(2, reportingStructure.getNumberOfReports());
     }
 }

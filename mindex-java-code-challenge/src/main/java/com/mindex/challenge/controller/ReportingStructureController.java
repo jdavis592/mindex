@@ -17,13 +17,17 @@ import javax.validation.Valid;
 public class ReportingStructureController {
     private static final Logger LOG = LoggerFactory.getLogger(ReportingStructureController.class);
 
+    private final ReportingStructureService reportingStructureService;
+
     @Autowired
-    private ReportingStructureService reportingStructureService;
+    public ReportingStructureController(ReportingStructureService reportingStructureService) {
+        this.reportingStructureService = reportingStructureService;
+    }
 
     @GetMapping("/employee/reportingStructure/{id}")
     @Valid
-    public ResponseEntity<ReportingStructure> CalculateNumberOfReports(@PathVariable String id) {
-        LOG.debug("Received CalculateNumberOfReports request for id{}", id);
+    public ResponseEntity<ReportingStructure> getReportingStructure(@PathVariable String id) {
+        LOG.debug("Received GetReportingStructure request for id{}", id);
 
         return new ResponseEntity<>(reportingStructureService.GetReportingStructure(id), HttpStatus.OK);
     }
